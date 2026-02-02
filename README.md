@@ -1,59 +1,56 @@
 # neurolinguaRT
-NeuroLingua-RT: Raspberry Pi Real-Time Sleep Stage Forecasting Server
+# Raspberry Pi Real-Time Sleep Stage Forecasting Server
 
-This repository contains the Raspberry Pi runtime implementation of NeuroLingua-RT, a lightweight, embedded-capable framework for real-time sleep stage forecasting using EEG/EOG signals.
+This repository contains the **Raspberry Pi runtime code** used in the *NeuroLingua / NeuroLingua-RT* framework for **real-time sleep stage prediction and forecasting** from EEG and EOG signals.
 
-The code implements a full online pipeline, including:
+The script implements an **online, low-latency inference server** that receives physiological signals from an external acquisition system, processes them continuously, and performs neural network inference using a pre-trained ONNX model. The code is designed for **on-device execution** and was used for the real-time and embedded experiments reported in the paper.
 
-streaming EEG/EOG acquisition via UART,
+---
 
-real-time preprocessing and subwindow buffering,
+## What This Code Does
 
-ONNX-based neural inference,
+The script `raspberry_sleep_final_webserver_2_forPaper.py` runs as a **continuous real-time service** on a Raspberry Pi and performs the following tasks:
 
-next-epoch sleep stage forecasting,
+1. Receives EEG/EOG samples from an external device via UART  
+2. Verifies incoming data using CRC checks  
+3. Applies signal preprocessing  
+4. Segments the signal into **3-second subwindows**  
+5. Maintains a rolling temporal buffer equivalent to 30-second epochs  
+6. Executes a **pre-trained ONNX sleep-staging model**  
+7. Predicts the current sleep stage and the upcoming sleep stage  
+8. Optionally triggers GPIO relays based on predictions  
+9. Serves predictions through a lightweight web interface  
 
-optional relay-based closed-loop actuation,
+All processing is performed **locally** on the Raspberry Pi.
 
-and a lightweight web interface for visualization.
+---
 
-This implementation accompanies the NeuroLingua-RT paper and is intended for reproducibility and experimental validation, rather than offline model training.
-1. System Overview
+## Intended Use
 
-The system operates continuously on 3-second subwindows of EEG/EOG data and maintains a rolling buffer corresponding to past 30-second epochs.
-After each new subwindow arrives, the model predicts:
+This code is intended for:
 
-the current sleep stage, and
+- Real-time sleep stage prediction experiments  
+- Embedded and edge-AI validation of sleep staging models  
+- Closed-loop sleep monitoring and actuation setups  
+- Reproducibility of the NeuroLingua-RT runtime pipeline  
 
-the next (upcoming) sleep stage, enabling anticipatory operation.
-This single script contains:
+The code **does not** include model training or dataset handling.  
+It assumes a **pre-trained model** is already available in ONNX format.
 
-UART communication
+---
 
-Frame parsing and CRC verification
+## Runtime Characteristics
 
-ACK/NACK handshake
+- Subwindow duration: **3 seconds**  
+- Epoch context: **rolling 30-second history**  
+- Execution mode: **online / streaming**  
+- Inference backend: **ONNX Runtime**  
+- Typical latency: **tens of milliseconds per update** on Raspberry Pi 5  
 
-Signal preprocessing
+Subwindows are used as internal modeling units; labels are defined at the epoch level during evaluation.
 
-Filtering and normalization
+---
 
-Temporal buffering
+## Code File
 
-Dataset-compatible 3-second windowing
 
-Neural inference
-
-ONNX Runtime execution
-
-Softmax post-processing
-
-Real-time control
-
-Optional GPIO relay triggering
-
-Web server
-
-Live visualization of predictions
-
-All components are designed to run fully on-device.
