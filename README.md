@@ -68,8 +68,48 @@ The implementation reflects the exact runtime configuration used in the paper an
 ---
 
 ## Dependencies
-
+numpy
+scipy
+onnxruntime
+flask
+pyserial
+RPi.GPIO
 The code requires Python 3.8+ and the following libraries:
 
+
+GPIO support is optional and can be disabled if not needed.
+
+---
+
+## Model Requirement
+
+A trained sleep-staging model exported to **ONNX format** must be provided.  
+The model path is specified inside the script.
+
+Optional INT8 quantization can be used to reduce latency and memory usage.
+
+---
+
+## Execution
+
+To start the real-time server:
+
+neurolinguaRT_raspberry.py
+
+
+Once running, the script continuously processes incoming data and updates predictions in real time.
+
+---
+
+## Relation to the Paper
+
+This code corresponds to the **embedded, real-time runtime layer** of the NeuroLingua / NeuroLingua-RT framework and was used for the Raspberry Pi experiments reported in the paper. It is released to support transparency and reproducibility.
+
+---
+
+## License
+
+This code is provided for **research and academic use**.  
+Commercial use requires permission from the authors.
 
 
