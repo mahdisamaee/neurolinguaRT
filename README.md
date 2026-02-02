@@ -52,5 +52,24 @@ Subwindows are used as internal modeling units; labels are defined at the epoch 
 ---
 
 ## Code File
+neurolinguaRT_raspberry.py
+
+The script is self-contained and includes:
+
+- UART communication and framing  
+- Signal preprocessing  
+- Temporal buffering logic  
+- ONNX model inference  
+- Optional GPIO relay control  
+- Web-based visualization server  
+
+The implementation reflects the exact runtime configuration used in the paper and has not been simplified for demonstration purposes.
+
+---
+
+## Dependencies
+
+The code requires Python 3.8+ and the following libraries:
+
 
 
